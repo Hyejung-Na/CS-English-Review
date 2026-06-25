@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Olive Young G.L.C Study App + Admin Report</title>
+  <style>
+    :root{
+      --bg:#f5f8ef;
+      --surface:#ffffff;
+      --surface-soft:#f8fbeF;
+      --surface-olive:#eff6df;
+      --primary:#97c11f;
+      --primary-dark:#5e7f0e;
+      --accent:#d8eca8;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#d7e2c3;
+      --success:#15803d;
+      --error:#dc2626;
+      --warning:#b45309;
+      --ink-olive:#30420b;
+      --shadow:0 12px 28px rgba(36,52,12,.08);
+      --radius-lg:24px;
+      --radius-md:18px;
+      --radius-sm:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#ecf5d8 0%, var(--bg) 180px);color:var(--text);font-family:Inter, Pretendard, "Noto Sans KR", "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif}
+    body{min-height:100vh}
+    button,input,select{font:inherit}
+    input,select{width:100%;border:1px solid var(--border);background:#fff;min-height:42px;border-radius:13px;padding:10px 12px;color:var(--text)}
+    .app{max-width:430px;min-height:100vh;margin:0 auto;padding:12px 12px 28px;position:relative}
+    .header{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,0);background:linear-gradient(180deg,rgba(245,248,239,.98) 0%, rgba(245,248,239,.95) 72%, rgba(245,248,239,0) 100%);backdrop-filter:blur(10px)}
+    .hero{background:linear-gradient(135deg,#abd43a 0%, #ddf0b4 100%);border-radius:22px;padding:12px 14px;box-shadow:var(--shadow);color:#223108}
+    .eyebrow{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.78);font-size:11px;font-weight:800}
+    h1{font-size:18px;line-height:1.2;margin:8px 0 6px}
+    .hero p{margin:0;font-size:12px;line-height:1.45;color:#355006}
+    .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .meta-card{background:rgba(255,255,255,.84);border-radius:14px;padding:8px 10px;border:1px solid rgba(255,255,255,.75)}
+    .meta-card span{display:block;font-size:10px;color:#456015;font-weight:800;margin-bottom:3px}
+    .meta-card strong{font-size:13px}
+    .progress-wrap{margin-top:10px}
+    .progress-shell{height:8px;background:rgba(255,255,255,.55);border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary-dark),#7fa517);transition:width .25s ease}
+    .save-line{margin-top:6px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;font-size:11px;color:#455a17}
+    .tabs{display:flex;gap:6px;overflow:auto;padding:8px 2px 4px;scrollbar-width:none}
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{min-width:102px;padding:8px 10px;border-radius:14px;border:1px solid var(--border);background:#fff;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.03)}
+    .tab strong{display:block;font-size:13px}
+    .tab small{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
+    .tab.active{background:var(--surface-olive);border-color:#bed585;box-shadow:0 0 0 2px rgba(151,193,31,.14)}
+    .tab.done::after{content:'✓';float:right;color:var(--success);font-weight:900}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:14px;margin-top:6px}
+    .card h2{margin:0 0 4px;font-size:18px;line-height:1.28}
+    .sub{font-size:13px;line-height:1.5;color:var(--muted);margin-bottom:12px}
+    .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px}
+    .tag{padding:6px 9px;border-radius:999px;background:var(--surface-olive);border:1px solid #d0e49f;color:#4b6611;font-size:11px;font-weight:800}
+    .section-title{font-size:15px;font-weight:800;margin:14px 0 8px}
+    .panel{border:1px solid var(--border);border-radius:18px;padding:12px;background:#fcfdf9;margin-bottom:10px}
+    .panel h3{margin:0 0 8px;font-size:14px;line-height:1.4}
+    .help{font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:8px}
+    .grid-2{display:grid;grid-template-columns:1fr;gap:12px}
+    .stack{display:grid;gap:8px}
+    .match-col{border:1px dashed var(--border);background:#fff;border-radius:16px;padding:12px}
+    .match-col h4{margin:0 0 10px;font-size:13px;color:var(--muted)}
+    .match-mobile{padding-bottom:12px}
+    .match-topline{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+    .match-status{font-size:12px;color:var(--muted);font-weight:700}
+    .match-status.ok{color:var(--success)}
+    .match-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px}
+    .match-pill{min-height:38px;border-radius:13px;font-weight:800;font-size:12px;padding:8px 0}
+    .match-pill.current{background:#22310a;border-color:#22310a;color:#fff}
+    .match-pill.answered{background:#edf9f0;border-color:#9ad1aa}
+    .match-stage{display:grid;gap:10px;margin-bottom:12px}
+    .match-card{padding:12px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(180deg,#fff 0%,#f8fbef 100%)}
+    .match-label{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:8px}
+    .match-word{font-size:22px;line-height:1.2;font-weight:900;color:var(--ink-olive);word-break:break-word}
+    .match-selected{margin-top:10px;padding:10px;border-radius:14px;background:#fff;border:1px dashed var(--border);font-size:13px;line-height:1.45;color:var(--text)}
+    .match-selected strong{color:var(--ink-olive)}
+    .match-selected.placeholder{color:var(--muted)}
+    .match-nav{display:flex;justify-content:flex-end;gap:8px}
+    .match-nav .ghost{min-height:40px;padding:10px 12px;font-size:13px}
+    .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .match-choice{min-height:66px;padding:10px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;text-align:left;font-size:13px}
+    .match-choice small{font-size:11px;color:var(--muted);line-height:1.3}
+    .match-choice.occupied{background:#f8fafc}
+    .match-choice.selected{background:#f4fae6;border-color:#99bf3c}
+    .match-choice.matched{background:#edf9f0;border-color:#9ad1aa}
+    .match-choice.current-answer{box-shadow:0 0 0 2px rgba(151,193,31,.16)}
+    .match-summary{margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
+    .match-summary-list{display:grid;gap:8px}
+    .match-summary-item{display:flex;gap:8px;align-items:flex-start;padding:9px 10px;border-radius:13px;background:#fff;border:1px solid var(--border);font-size:12px;line-height:1.4;text-align:left}
+    .match-summary-item b{color:var(--ink-olive)}
+    @media (max-width:390px){
+      .match-word{font-size:20px}
+      .match-nav{justify-content:stretch}
+      .match-nav .ghost{width:100%}
+      .choice-grid{grid-template-columns:1fr 1fr}
+    }
+    .learner-panel{padding:10px 12px}
+    .learner-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;background:#fff;border:1px solid var(--border);border-radius:14px;padding:10px 12px}
+    .learner-toggle strong{display:block;font-size:13px;color:var(--ink-olive)}
+    .learner-toggle small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+    .learner-toggle .toggle-icon{font-size:18px;font-weight:900;color:var(--primary-dark)}
+    .learner-body{margin-top:10px;display:grid;gap:8px}
+    .mobile-quiz{padding-bottom:12px}
+    .quiz-topline{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+    .quiz-status{font-size:12px;color:var(--muted);font-weight:700}
+    .quiz-status.ok{color:var(--success)}
+    .quiz-progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:10px}
+    .quiz-pill{min-height:38px;border-radius:13px;font-weight:800;font-size:12px;padding:8px 0}
+    .quiz-pill.current{background:#22310a;border-color:#22310a;color:#fff}
+    .quiz-pill.answered{background:#edf9f0;border-color:#9ad1aa}
+    .focus-card{padding:12px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(180deg,#fff 0%,#f8fbef 100%);margin-bottom:10px}
+    .focus-meta{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:8px}
+    .focus-prompt{font-size:17px;line-height:1.4;font-weight:900;color:var(--ink-olive);word-break:keep-all}
+    .focus-sub{margin-top:8px;padding:10px;border-radius:14px;background:#fff;border:1px dashed var(--border);font-size:13px;line-height:1.45;color:var(--text)}
+    .focus-sub.placeholder{color:var(--muted)}
+    .option-stack-mobile{display:grid;gap:8px}
+    .option-card{min-height:62px;padding:11px 12px;display:flex;align-items:flex-start;justify-content:flex-start;text-align:left;line-height:1.4;font-weight:700;font-size:13px}
+    .question-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px}
+    .question-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px}
+    .token-wrap.mobile-token-wrap{display:flex;flex-wrap:wrap;gap:8px}
+    .token-wrap.mobile-token-wrap .token{min-height:44px;padding:10px 12px;font-weight:800;font-size:13px}
+    .build-box.mobile-build-box{min-height:72px;padding:10px 10px 4px}
+    .question-summary{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+    .question-summary-list{display:grid;gap:8px}
+    .question-summary-item{display:flex;gap:8px;align-items:flex-start;padding:9px 10px;border-radius:13px;background:#fff;border:1px solid var(--border);font-size:12px;line-height:1.4;text-align:left}
+    .question-summary-item b{color:var(--ink-olive)}
+    @media (max-width:390px){
+      .focus-prompt{font-size:16px}
+      .quiz-progress{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .question-nav,.question-tools{grid-template-columns:1fr}
+      .option-card{min-height:58px}
+    }
+    .btn,.choice,.token,.ghost,.primary,.nav-btn{appearance:none;border:none;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:13px;padding:10px 12px;min-height:42px;cursor:pointer;transition:.18s ease;touch-action:manipulation}
+    .btn:active,.choice:active,.token:active,.ghost:active,.primary:active,.nav-btn:active{transform:scale(.99)}
+    .btn.selected,.choice.selected,.token.selected{background:#f4fae6;border-color:#99bf3c}
+    .btn.matched,.choice.correct{background:#edf9f0;border-color:#9ad1aa}
+    .choice.wrong{background:#fff1f1;border-color:#efb4b4}
+    .btn.disabled,.choice.disabled,.token.used{opacity:.46;pointer-events:none}
+    .btn.matched.editable,.btn.selected.editable{opacity:1;pointer-events:auto}
+    .inline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .ghost{background:#fff}
+    .primary{background:var(--primary);border-color:var(--primary);color:#233106;font-weight:900}
+    .primary.dark{background:#22310a;border-color:#22310a;color:#fff}
+    .primary.warn{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+    .feedback{margin-top:10px;font-size:13px;line-height:1.5}
+    .feedback.ok{color:var(--success)}
+    .feedback.bad{color:var(--error)}
+    .hint{margin-top:10px;background:#fff8eb;border:1px solid #f6dbac;border-radius:14px;padding:10px 12px;color:#8c5d0a;font-size:13px;line-height:1.5}
+    .build-box{min-height:64px;border:1.5px dashed #acc85b;border-radius:16px;background:#f9fde9;padding:10px 10px 2px;margin-bottom:10px}
+    .built-wrap,.token-wrap{display:flex;flex-wrap:wrap;gap:8px}
+    .summary-grid,.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .summary-item,.admin-stat{border:1px solid var(--border);background:#fbfdf7;border-radius:16px;padding:12px}
+    .summary-item span,.admin-stat span{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+    .summary-item strong,.admin-stat strong{font-size:17px}
+    .record-list{display:grid;gap:10px;margin-top:12px}
+    .record-card{border:1px solid var(--border);border-radius:18px;background:#fff;padding:12px}
+    .record-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+    .record-head strong{font-size:15px}
+    .record-head small{color:var(--muted);display:block;margin-top:2px}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .mini-item{background:#f8fbf1;border:1px solid var(--border);border-radius:12px;padding:8px 10px;font-size:12px}
+    .empty{padding:14px;border:1px dashed var(--border);border-radius:16px;color:var(--muted);background:#fbfdf7;text-align:center}
+    .footer-card{margin-top:12px;padding:12px;border-radius:16px;background:#f6faea;border:1px solid var(--border);font-size:12px;line-height:1.5}
+    .footer-card a{color:var(--primary-dark);font-weight:700}
+    .divider{height:1px;background:var(--border);margin:18px 0}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f4fae4;border:1px solid #d0e49f;font-size:12px;color:#587412;font-weight:800}
+    .hidden{display:none!important}
+    @media (min-width:431px){
+      .grid-2,.summary-grid,.admin-grid{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <section class="hero">
+        <div class="eyebrow">Olive Young · G.L.C Beginner</div>
+        <h1>모바일 세로형 Study App</h1>
+        <p>고객응대 영어를 단계별로 복습하고, 결과는 관리자용 리포트에 저장할 수 있게 만든 실행형 버전</p>
+        <div class="meta-grid">
+          <div class="meta-card"><span>현재 단계</span><strong id="currentStepLabel">Step 1</strong></div>
+          <div class="meta-card"><span>총점</span><strong id="scoreLabel">0 / 0</strong></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-shell"><div class="progress-bar" id="progressBar"></div></div>
+          <div class="save-line">
+            <span>자동 새로고침 없음</span>
+            <span id="saveStateText">진행 상태 저장 준비 완료</span>
+          </div>
+        </div>
+      </section>
+      <nav class="tabs" id="stepTabs"></nav>
+    </div>
+
+    <main id="mainCard" class="card"></main>
+
+    <section class="card" id="adminCard"></section>
+
+    <div class="footer-card">
+      Source: <a href="https://www.genspark.ai/api/files/s/HkFFeT1e" target="_blank" rel="noopener noreferrer">CJ올리브영 G.L.C 영어 초급 교재 PDF</a><br />
+      핵심 패턴: <strong>Let me / It’s on / We have it / You can get / It’ll take</strong> · 별첨 표현: 결제, 교환/환불, 택스프리, 멤버십
+    </div>
+  </div>
+
+
+  <script>
+  (function(){
+    'use strict';
+
+    var APP_STORAGE_KEY = 'olive-young-glc-study-app-mobile-v2';
+    var REPORT_STORAGE_KEY = 'olive-young-glc-admin-report-v1';
+    var memoryStore = {};
+
+    function safeGet(key){
+      try { return window.localStorage.getItem(key); }
+      catch(e){ return memoryStore[key] || null; }
+    }
+    function safeSet(key, value){
+      try { window.localStorage.setItem(key, value); }
+      catch(e){ memoryStore[key] = value; }
+    }
+    function safeRemove(key){
+      try { window.localStorage.removeItem(key); }
+      catch(e){ delete memoryStore[key]; }
+    }
+
+    var steps = [
+      {
+        id: 'vocab',
+        title: 'Step 1',
+        short: '단어 매칭',
+        subtitle: '핵심 단어와 뜻 연결',
+        type: 'matching',
+        tags: ['vocabulary','retail English','matching'],
+        instructions: '영어 표현을 누른 뒤, 알맞은 한국어 뜻을 선택하세요.',
+        pairs: [
+          ['on sale', '할인 중'],
+          ['in stock', '재고 있음'],
+          ['receipt', '영수증'],
+          ['counter', '계산대'],
+          ['free gift', '증정품'],
+          ['payment method', '결제 수단'],
+          ['physical passport', '실물 여권'],
+          ['reusable bag', '리유저블백']
+        ]
+      },
+      {
+        id: 'chunk',
+        title: 'Step 2',
+        short: 'chunk 퀴즈',
+        subtitle: '자주 붙는 표현 익히기',
+        type: 'mcq',
+        tags: ['collocation','promotion','payment'],
+        instructions: '가장 자연스럽고 매장 영어다운 표현을 고르세요.',
+        questions: [
+          { prompt:'“지금 행사 중입니다”에 가장 자연스러운 표현은?', options:['It is promoting now.','It is on promotion now.','It is promotioning now.'], answer:1, explain:'행사 상태는 on + promotion 구조로 안내합니다.' },
+          { prompt:'“그 색상은 품절입니다”에 가장 자연스러운 표현은?', options:['That color is finished.','We are out of that color.','That color is over.'], answer:1, explain:'out of that color는 품절 안내의 핵심 chunk입니다.' },
+          { prompt:'“즉시 환급”에 해당하는 표현은?', options:['instant tax refund','quick tax returner','fast refund tax'], answer:0, explain:'교재 별첨의 택스프리 핵심 표현입니다.' },
+          { prompt:'“카드를 꽂아주세요”에 가장 적절한 표현은?', options:['Please insert your card into the reader.','Please put your card in machine.','Please enter your card at front.'], answer:0, explain:'POS 안내 문장으로 가장 정확하고 자연스럽습니다.' },
+          { prompt:'“회원 전용 행사 상품입니다”에 가장 자연스러운 표현은?', options:['This promotional item is for members only.','This event item only members.','This product is memberly event only.'], answer:0, explain:'members only가 가장 명확한 서비스 표현입니다.' }
+        ]
+      },
+      {
+        id: 'pattern',
+        title: 'Step 3',
+        short: '패턴 고르기',
+        subtitle: '상황에 맞는 구조 선택',
+        type: 'mcq',
+        tags: ['pattern','customer service','scenario'],
+        instructions: '상황에 가장 잘 맞는 핵심 패턴을 선택하세요.',
+        questions: [
+          { prompt:'고객이 “이 토너 있나요?”라고 물었을 때, 바로 확인해 드리겠다고 말하려면?', options:['Let me...','It’s on...','You can get...'], answer:0, explain:'확인·안내·직접 행동은 Let me 패턴이 핵심입니다.' },
+          { prompt:'고객이 “이거 할인 중인가요?”라고 물었을 때 가장 적절한 패턴은?', options:['We have it...','It’s on...','It’ll take...'], answer:1, explain:'행사 상태 안내는 It’s on...이 딱 맞습니다.' },
+          { prompt:'고객이 “택스프리 되나요?”라고 물었을 때 가장 적절한 패턴은?', options:['We have it... / We do offer...','Let me...','It’s on...'], answer:0, explain:'가능 여부 안내는 We have it / We do offer 구조를 씁니다.' },
+          { prompt:'고객이 “환불 받을 수 있나요?”라고 물었을 때 가장 적절한 패턴은?', options:['You can get...','It’s on...','We’re out of...'], answer:0, explain:'고객이 받는 결과 설명은 You can get... 패턴입니다.' },
+          { prompt:'고객을 계산대로 안내하며 “잠시만요, 3분 정도 걸립니다”라고 말할 때 가장 적절한 패턴은?', options:['It’ll take... / I’ll take you...','We have it...','It’s on...'], answer:0, explain:'시간 소요와 이동 안내는 It’ll take / I’ll take you 구조가 적합합니다.' }
+        ]
+      },
+      {
+        id: 'unscramble',
+        title: 'Step 4',
+        short: '문장 배열',
+        subtitle: '듣기 + 문장 조합',
+        type: 'unscramble',
+        tags: ['listening','sentence building','TTS'],
+        instructions: '토큰을 눌러 문장을 완성하세요. 듣기 버튼으로 발음을 반복 복습할 수 있습니다.',
+        questions: [
+          { prompt:'확인해 드리겠습니다.', answer:'Let me check that for you.', tokens:['that','Let','you.','check','for','me'], hint:'Let me + 동사 + that + for you' },
+          { prompt:'지금 할인 중입니다.', answer:'It’s on sale now.', tokens:['sale','now.','on','It’s'], hint:'It’s on + 상태' },
+          { prompt:'그 색상은 품절입니다.', answer:'I’m afraid we’re out of that color.', tokens:['out','we’re','of','I’m','that','afraid','color.'], hint:'I’m afraid + we’re out of + 대상' },
+          { prompt:'3만원 이상 구매하시면 증정품을 받으실 수 있습니다.', answer:'You can get a free gift when you spend over 30,000 won.', tokens:['get','won.','You','a','gift','when','30,000','can','free','spend','over','you'], hint:'You can get + 혜택 + when ...' },
+          { prompt:'약 3분 정도 걸립니다.', answer:'It will take around 3 minutes.', tokens:['around','will','take','It','minutes.','3'], hint:'It will take + 시간' }
+        ]
+      },
+      {
+        id: 'situational',
+        title: 'Step 5',
+        short: '실전 상황',
+        subtitle: '교재 + 확장 상황 응대',
+        type: 'mcq',
+        tags: ['role-play','payment','tax refund'],
+        instructions: '교재 기반 상황과 실제 매장 확장 상황에서 가장 자연스러운 응답을 고르세요.',
+        questions: [
+          { prompt:'Customer: “I’m looking for something for sensitive skin.” Staff:', options:['Let me find the right one for your skin type.','It’s on promotion until Friday.','You can get a refund at the counter.'], answer:0, explain:'고객 니즈 파악 뒤 추천 연결은 Let me find...가 자연스럽습니다.' },
+          { prompt:'Customer: “Do I get anything if I buy this?” Staff:', options:['Yes, it’s on a free gift promotion.','We have that one.','It’ll take a moment.'], answer:0, explain:'혜택 여부를 묻는 상황이므로 free gift promotion 안내가 정답입니다.' },
+          { prompt:'Customer: “Can I pay with this card?” 단말 오류로 결제가 안 될 때 Staff:', options:['I’m sorry, we can’t process this card. Do you have another card?','This one is for sensitive skin.','Let me show you another toner.'], answer:0, explain:'별첨 결제 표현을 활용한 실전 응대입니다.' },
+          { prompt:'Customer: “Can I get a tax refund?” Staff:', options:['You can get an instant tax refund when you spend over 15,000 won.','We are out of that color.','Please go by yourself.'], answer:0, explain:'즉시환급 기준 금액을 명확히 안내하는 문장입니다.' },
+          { prompt:'Customer: “Is this free gift for everyone?” Staff:', options:['It will take 5 minutes.','This free gift is for members only.','Let me check that toner for you.'], answer:1, explain:'멤버십 전용 혜택은 members only로 바로 안내합니다.' }
+        ]
+      }
+    ];
+
+    function shuffle(arr){
+      return arr.map(function(item){ return { item:item, sort:Math.random() }; }).sort(function(a,b){ return a.sort - b.sort; }).map(function(entry){ return entry.item; });
+    }
+
+    function buildDefaultState(){
+      return {
+        currentStep: 0,
+        matchingSelectedLeft: 0,
+        matchingAnswers: {},
+        mcqAnswers: { chunk:{}, pattern:{}, situational:{} },
+        scrambleAnswers: {},
+        checked: {},
+        hints: {},
+        learner: { name:'', store:'' },
+        showLearnerForm: false,
+        questionViewIndex: { chunk:0, pattern:0, unscramble:0, situational:0 },
+        matchingRightOrder: shuffle(steps[0].pairs.map(function(pair, index){ return { index:index, text:pair[1] }; })),
+        savedAt: null
+      };
+    }
+
+    function loadAppState(){
+      try {
+        var raw = safeGet(APP_STORAGE_KEY);
+        if(!raw) return buildDefaultState();
+        var parsed = JSON.parse(raw);
+        var base = buildDefaultState();
+        return merge(base, parsed);
+      } catch(e){
+        return buildDefaultState();
+      }
+    }
+
+    function loadReports(){
+      try {
+        var raw = safeGet(REPORT_STORAGE_KEY);
+        if(!raw) return [];
+        var parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch(e){
+        return [];
+      }
+    }
+
+    function merge(target, source){
+      var out = JSON.parse(JSON.stringify(target));
+      if(source && typeof source === 'object'){
+        Object.keys(source).forEach(function(key){
+          if(source[key] && typeof source[key] === 'object' && !Array.isArray(source[key]) && out[key] && typeof out[key] === 'object' && !Array.isArray(out[key])){
+            out[key] = merge(out[key], source[key]);
+          } else {
+            out[key] = source[key];
+          }
+        });
+      }
+      return out;
+    }
+
+    var state = loadAppState();
+    var reports = loadReports();
+
+    function saveState(){
+      state.savedAt = new Date().toISOString();
+      safeSet(APP_STORAGE_KEY, JSON.stringify(state));
+      var label = document.getElementById('saveStateText');
+      if(label){
+        label.textContent = '진행 상태 저장됨 · ' + formatTime(state.savedAt);
+      }
+    }
+
+    function saveReports(){
+      safeSet(REPORT_STORAGE_KEY, JSON.stringify(reports));
+    }
+
+    function formatTime(iso){
+      try {
+        return new Date(iso).toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' });
+      } catch(e){
+        return '';
+      }
+    }
+
+    function formatDateTime(iso){
+      try {
+        return new Date(iso).toLocaleString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+      } catch(e){
+        return iso || '';
+      }
+    }
+
+    function normalize(text){
+      return String(text || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function escapeHtml(text){
+      return String(text)
+        .split('&').join('&amp;')
+        .split('<').join('&lt;')
+        .split('>').join('&gt;')
+        .split('"').join('&quot;')
+        .split("'").join('&#39;');
+    }
+
+    function getBuiltSentence(questionIndex){
+      var arr = state.scrambleAnswers[questionIndex] || [];
+      return arr.map(function(item){ return item.word; }).join(' ');
+    }
+
+    function findLeftByRight(rightIndex){
+      var found = null;
+      Object.keys(state.matchingAnswers).some(function(key){
+        if(Number(state.matchingAnswers[key]) === rightIndex){
+          found = Number(key);
+          return true;
+        }
+        return false;
+      });
+      return found;
+    }
+
+    function removeMatchingByLeft(leftIndex){
+      if(state.matchingAnswers[leftIndex] !== undefined) delete state.matchingAnswers[leftIndex];
+    }
+
+    function countMatchingAnswered(step){
+      return step.pairs.filter(function(pair, i){ return state.matchingAnswers[i] !== undefined; }).length;
+    }
+
+    function getActiveMatchingIndex(step){
+      var total = (step && step.pairs ? step.pairs.length : 0);
+      if(!total) return 0;
+      var current = Number(state.matchingSelectedLeft);
+      if(isNaN(current) || current < 0 || current >= total){
+        for(var i = 0; i < total; i++){
+          if(state.matchingAnswers[i] === undefined) return i;
+        }
+        return 0;
+      }
+      return current;
+    }
+
+    function getAdjacentMatchingIndex(step, currentIndex, direction){
+      var total = step.pairs.length;
+      if(!total) return 0;
+      var next = currentIndex + direction;
+      if(next < 0) next = total - 1;
+      if(next >= total) next = 0;
+      return next;
+    }
+
+    function getNextUnansweredMatchingIndex(step, currentIndex){
+      var total = step.pairs.length;
+      for(var offset = 1; offset <= total; offset++) {
+        var idx = (currentIndex + offset) % total;
+        if(state.matchingAnswers[idx] === undefined) return idx;
+      }
+      return currentIndex;
+    }
+
+    function countAnsweredInStep(step){
+      if(step.type === 'matching') return countMatchingAnswered(step);
+      if(step.type === 'unscramble'){
+        return step.questions.filter(function(q, i){ return (state.scrambleAnswers[i] || []).length > 0; }).length;
+      }
+      return Object.keys(state.mcqAnswers[step.id] || {}).length;
+    }
+
+    function hasQuestionAnswer(step, qIndex){
+      if(step.type === 'unscramble') return (state.scrambleAnswers[qIndex] || []).length > 0;
+      return (state.mcqAnswers[step.id] || {})[qIndex] !== undefined;
+    }
+
+    function getQuestionViewIndex(step){
+      var total = (step && step.questions ? step.questions.length : 0);
+      if(!total) return 0;
+      var current = Number((state.questionViewIndex || {})[step.id]);
+      if(isNaN(current) || current < 0 || current >= total){
+        for(var i = 0; i < total; i++){
+          if(!hasQuestionAnswer(step, i)) return i;
+        }
+        return 0;
+      }
+      return current;
+    }
+
+    function setQuestionViewIndex(stepId, index){
+      state.questionViewIndex = state.questionViewIndex || {};
+      state.questionViewIndex[stepId] = index;
+    }
+
+    function getAdjacentQuestionIndex(step, currentIndex, direction){
+      var total = step.questions.length;
+      if(!total) return 0;
+      var next = currentIndex + direction;
+      if(next < 0) next = total - 1;
+      if(next >= total) next = 0;
+      return next;
+    }
+
+    function getNextUnansweredQuestionIndex(step, currentIndex){
+      var total = step.questions.length;
+      for(var offset = 1; offset <= total; offset++){
+        var idx = (currentIndex + offset) % total;
+        if(!hasQuestionAnswer(step, idx)) return idx;
+      }
+      return currentIndex;
+    }
+
+    function clearQuestionAnswer(step, qIndex){
+      if(step.type === 'unscramble'){
+        state.scrambleAnswers[qIndex] = [];
+        state.hints[qIndex] = false;
+      } else {
+        if(state.mcqAnswers[step.id] && state.mcqAnswers[step.id][qIndex] !== undefined){
+          delete state.mcqAnswers[step.id][qIndex];
+        }
+      }
+    }
+
+    function isStepDone(step){
+      return !!state.checked[step.id];
+    }
+
+    function totalQuestions(){
+      return steps.reduce(function(sum, step){
+        return sum + (step.type === 'matching' ? step.pairs.length : step.questions.length);
+      }, 0);
+    }
+
+    function answeredCount(){
+      var count = Object.keys(state.matchingAnswers).length;
+      count += Object.keys(state.mcqAnswers.chunk || {}).length;
+      count += Object.keys(state.mcqAnswers.pattern || {}).length;
+      count += Object.keys(state.mcqAnswers.situational || {}).length;
+      count += Object.keys(state.scrambleAnswers).filter(function(key){ return (state.scrambleAnswers[key] || []).length > 0; }).length;
+      return count;
+    }
+
+    function progressPercent(){
+      return Math.min(100, Math.round((answeredCount() / totalQuestions()) * 100));
+    }
+
+    function stepScoreValue(step){
+      if(step.id === 'vocab'){
+        return step.pairs.filter(function(pair, i){ return Number(state.matchingAnswers[i]) === i; }).length;
+      }
+      if(step.id === 'unscramble'){
+        return step.questions.filter(function(q, i){ return normalize(getBuiltSentence(i)) === normalize(q.answer); }).length;
+      }
+      return step.questions.filter(function(q, i){ return Number((state.mcqAnswers[step.id] || {})[i]) === q.answer; }).length;
+    }
+
+    function stepScoreLabel(step){
+      var max = step.type === 'matching' ? step.pairs.length : step.questions.length;
+      return stepScoreValue(step) + ' / ' + max;
+    }
+
+    function totalCorrect(){
+      var score = 0;
+      steps.forEach(function(step){
+        if(state.checked[step.id]) score += stepScoreValue(step);
+      });
+      return score;
+    }
+
+    function allStepsChecked(){
+      return steps.every(function(step){ return !!state.checked[step.id]; });
+    }
+
+    function speak(text){
+      if(!('speechSynthesis' in window) || typeof window.SpeechSynthesisUtterance === 'undefined'){
+        alert('이 브라우저는 음성 듣기 기능을 지원하지 않습니다.');
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        var utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.9;
+        utter.pitch = 1;
+        window.speechSynthesis.speak(utter);
+      } catch(e){
+        alert('음성 재생 중 오류가 발생했습니다.');
+      }
+    }
+
+    function goStep(index){
+      state.currentStep = Math.max(0, Math.min(index, steps.length - 1));
+      saveState();
+      render();
+      try { window.scrollTo({ top:0, behavior:'smooth' }); } catch(e) { window.scrollTo(0,0); }
+    }
+
+    function clearCurrentStep(){
+      var step = steps[state.currentStep];
+      if(step.id === 'vocab'){
+        state.matchingSelectedLeft = 0;
+        state.matchingAnswers = {};
+      } else if(step.id === 'unscramble'){
+        state.scrambleAnswers = {};
+        state.hints = {};
+        setQuestionViewIndex(step.id, 0);
+      } else {
+        state.mcqAnswers[step.id] = {};
+        setQuestionViewIndex(step.id, 0);
+      }
+      state.checked[step.id] = false;
+      saveState();
+      render();
+    }
+
+    function resetAll(){
+      if(!confirm('전체 학습 기록을 초기화할까요? 현재 기기에 저장된 진행 상태가 모두 지워집니다.')) return;
+      var learner = state.learner || { name:'', store:'', team:'' };
+      state = buildDefaultState();
+      state.learner = learner;
+      saveState();
+      render();
+      try { window.scrollTo({ top:0, behavior:'smooth' }); } catch(e) { window.scrollTo(0,0); }
+    }
+
+    function buildReportRecord(){
+      return {
+        id: 'R-' + Date.now(),
+        savedAt: new Date().toISOString(),
+        learnerName: normalize(state.learner.name) || '이름 미입력',
+        storeName: normalize(state.learner.store) || '매장 미입력',
+        teamName: '',
+        totalScore: totalCorrect(),
+        totalQuestions: totalQuestions(),
+        completionRate: progressPercent(),
+        stepScores: steps.map(function(step){
+          return {
+            id: step.id,
+            title: step.title,
+            short: step.short,
+            correct: stepScoreValue(step),
+            total: step.type === 'matching' ? step.pairs.length : step.questions.length,
+            checked: !!state.checked[step.id]
+          };
+        })
+      };
+    }
+
+    function submitReport(){
+      var learnerName = normalize(state.learner.name);
+      if(!learnerName){
+        alert('관리자 리포트 저장 전, 학습자 이름을 입력해 주세요.');
+        return;
+      }
+      var record = buildReportRecord();
+      reports.unshift(record);
+      saveReports();
+      renderAdmin();
+      alert('관리자용 점수 리포트에 저장했습니다.');
+    }
+
+    function clearReports(){
+      if(!confirm('관리자 리포트를 모두 삭제할까요? 저장된 점수 기록이 초기화됩니다.')) return;
+      reports = [];
+      saveReports();
+      renderAdmin();
+    }
+
+    function downloadCSV(){
+      if(!reports.length){
+        alert('내보낼 리포트가 아직 없습니다.');
+        return;
+      }
+      var headers = ['saved_at','learner_name','store_name','total_score','total_questions','completion_rate','step1','step2','step3','step4','step5'];
+      var lines = [headers.join(',')];
+      reports.forEach(function(record){
+        var row = [
+          record.savedAt,
+          csvCell(record.learnerName),
+          csvCell(record.storeName),
+          record.totalScore,
+          record.totalQuestions,
+          record.completionRate + '%'
+        ];
+        record.stepScores.forEach(function(step){
+          row.push(csvCell(step.correct + '/' + step.total));
+        });
+        lines.push(row.join(','));
+      });
+      var csv = '\ufeff' + lines.join('\n');
+      var blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'olive_young_admin_report.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function csvCell(value){
+      var v = String(value == null ? '' : value);
+      if(/[",\n]/.test(v)) return '"' + v.split('"').join('""') + '"';
+      return v;
+    }
+
+    function renderTabs(){
+      var wrap = document.getElementById('stepTabs');
+      wrap.innerHTML = steps.map(function(step, index){
+        return '<button class="tab ' + (index === state.currentStep ? 'active' : '') + ' ' + (isStepDone(step) ? 'done' : '') + '" data-step="' + index + '">' +
+          '<strong>' + step.title + '</strong>' +
+          '<small>' + escapeHtml(step.short) + '</small>' +
+        '</button>';
+      }).join('');
+      Array.prototype.forEach.call(wrap.querySelectorAll('[data-step]'), function(btn){
+        btn.addEventListener('click', function(){ goStep(Number(btn.getAttribute('data-step'))); });
+      });
+    }
+
+    function renderHeader(){
+      var step = steps[state.currentStep];
+      document.getElementById('currentStepLabel').textContent = step.title + ' · ' + step.short;
+      document.getElementById('scoreLabel').textContent = totalCorrect() + ' / ' + totalQuestions();
+      document.getElementById('progressBar').style.width = progressPercent() + '%';
+      if(state.savedAt) document.getElementById('saveStateText').textContent = '진행 상태 저장됨 · ' + formatTime(state.savedAt);
+    }
+
+    function renderMain(){
+      var step = steps[state.currentStep];
+      var html = '' +
+        '<h2>' + step.title + '. ' + escapeHtml(step.short) + '</h2>' +
+        '<div class="sub">' + escapeHtml(step.subtitle) + '<br />' + escapeHtml(step.instructions) + '</div>' +
+        '<div class="tag-row">' + step.tags.map(function(tag){ return '<span class="tag">' + escapeHtml(tag) + '</span>'; }).join('') + '</div>' +
+        renderLearnerForm();
+
+      if(step.type === 'matching') html += renderMatching(step);
+      if(step.type === 'mcq') html += renderMcq(step);
+      if(step.type === 'unscramble') html += renderUnscramble(step);
+
+      html += '' +
+        '<div class="inline-actions">' +
+          '<button class="ghost" id="checkStepBtn">채점하기</button>' +
+          '<button class="ghost" id="clearStepBtn">이 단계만 초기화</button>' +
+          '<button class="primary warn" id="resetAllBtn">전체 초기화</button>' +
+        '</div>';
+
+      if(allStepsChecked()) html += renderSummary();
+
+      document.getElementById('mainCard').innerHTML = html;
+      bindMainEvents(step);
+    }
+
+    function renderLearnerForm(){
+      var hasLearnerData = normalize(state.learner.name || '').length || normalize(state.learner.store || '').length;
+      var open = !!state.showLearnerForm || !!hasLearnerData;
+      return '' +
+        '<div class="panel learner-panel">' +
+          '<button type="button" class="learner-toggle" id="learnerToggleBtn">' +
+            '<div><strong>학습자 정보</strong><small>관리자 리포트 저장용 정보 · 평소엔 접어 두어도 됩니다</small></div>' +
+            '<div class="toggle-icon">' + (open ? '−' : '+') + '</div>' +
+          '</button>' +
+          '<div class="learner-body ' + (open ? '' : 'hidden') + '" id="learnerBody">' +
+            '<div class="grid-2">' +
+              '<div><label class="help">학습자 이름</label><input id="learnerNameInput" type="text" placeholder="예: 김올리브" value="' + escapeHtml(state.learner.name || '') + '" /></div>' +
+              '<div><label class="help">매장명</label><input id="storeNameInput" type="text" placeholder="예: 올리브영 명동점" value="' + escapeHtml(state.learner.store || '') + '" /></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function renderMatching(step){
+      var activeIndex = getActiveMatchingIndex(step);
+      var currentPair = step.pairs[activeIndex];
+      var selectedRight = state.matchingAnswers[activeIndex];
+      var answered = countMatchingAnswered(step);
+
+      return '' +
+        '<div class="panel match-mobile">' +
+          '<h3>단어 하나씩 빠르게 매칭하세요</h3>' +
+          '<div class="help">상단 번호로 단어를 바꾸고, 아래 뜻을 한 번 탭해서 연결하세요. 이미 고른 뜻도 다시 눌러 수정할 수 있습니다.</div>' +
+          '<div class="match-topline">' +
+            '<div class="badge">진행 ' + answered + ' / ' + step.pairs.length + '</div>' +
+            '<div class="match-status ' + (selectedRight !== undefined ? 'ok' : '') + '">' +
+              (selectedRight !== undefined ? '선택 완료 · 다시 눌러 변경 가능' : '아직 뜻을 고르지 않았습니다') +
+            '</div>' +
+          '</div>' +
+          '<div class="match-progress">' +
+            step.pairs.map(function(pair, i){
+              var classes = ['btn','match-pill'];
+              if(i === activeIndex) classes.push('current');
+              if(state.matchingAnswers[i] !== undefined) classes.push('answered');
+              return '<button type="button" class="' + classes.join(' ') + '" data-match-index="' + i + '">' + (i + 1) + '</button>';
+            }).join('') +
+          '</div>' +
+          '<div class="match-stage">' +
+            '<div class="match-card">' +
+              '<div class="match-label">English ' + (activeIndex + 1) + '</div>' +
+              '<div class="match-word">' + escapeHtml(currentPair[0]) + '</div>' +
+              '<div class="match-selected ' + (selectedRight === undefined ? 'placeholder' : '') + '">' +
+                (selectedRight === undefined ? '아래에서 한국어 뜻을 선택해 주세요.' : '선택한 뜻: <strong>' + escapeHtml(step.pairs[selectedRight][1]) + '</strong>') +
+              '</div>' +
+            '</div>' +
+            '<div class="match-nav">' +
+              '<button type="button" class="ghost" data-clear-match="' + activeIndex + '">선택 지우기</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="choice-grid">' +
+            state.matchingRightOrder.map(function(item){
+              var owner = findLeftByRight(item.index);
+              var isSelected = selectedRight === item.index;
+              var classes = ['btn','match-choice'];
+              if(owner !== null) classes.push('matched');
+              if(owner !== null && owner !== activeIndex) classes.push('occupied');
+              if(isSelected) classes.push('selected','current-answer');
+              var note = owner !== null && owner !== activeIndex ? ((owner + 1) + '번에 연결됨') : (isSelected ? '현재 선택됨' : '탭해서 연결');
+              return '<button type="button" class="' + classes.join(' ') + '" data-match-choice="' + item.index + '" data-active-left="' + activeIndex + '"><span>' + escapeHtml(item.text) + '</span><small>' + escapeHtml(note) + '</small></button>';
+            }).join('') +
+          '</div>' +
+          '<div class="match-summary">' +
+            '<div class="help" style="margin-bottom:8px">현재 연결 현황</div>' +
+            (answered ? '<div class="match-summary-list">' +
+              step.pairs.map(function(pair, i){
+                if(state.matchingAnswers[i] === undefined) return '';
+                var rightIndex = state.matchingAnswers[i];
+                return '<button type="button" class="ghost match-summary-item" data-match-index="' + i + '"><b>' + (i + 1) + '.</b><span>' + escapeHtml(pair[0]) + ' → ' + escapeHtml(step.pairs[rightIndex][1]) + '</span></button>';
+              }).join('') +
+            '</div>' : '<div class="empty">아직 연결한 단어가 없습니다.</div>') +
+          '</div>' +
+          (state.checked[step.id] ? '<div class="feedback ' + (stepScoreValue(step) === step.pairs.length ? 'ok' : 'bad') + '">결과: ' + stepScoreLabel(step) + '</div>' : '') +
+        '</div>';
+    }
+
+    function renderMcq(step){
+      var activeIndex = getQuestionViewIndex(step);
+      var q = step.questions[activeIndex];
+      var selected = (state.mcqAnswers[step.id] || {})[activeIndex];
+      var checked = !!state.checked[step.id];
+      var answered = countAnsweredInStep(step);
+
+      return '' +
+        '<div class="panel mobile-quiz">' +
+          '<h3>한 문제씩 빠르게 풀어보세요</h3>' +
+          '<div class="help">문항 번호를 눌러 이동하고, 답은 언제든 다시 선택해 바꿀 수 있습니다.</div>' +
+          '<div class="quiz-topline">' +
+            '<div class="badge">진행 ' + answered + ' / ' + step.questions.length + '</div>' +
+            '<div class="quiz-status ' + (selected !== undefined ? 'ok' : '') + '">' +
+              (selected !== undefined ? '선택 완료 · 다시 탭해 수정 가능' : '답을 아직 고르지 않았습니다') +
+            '</div>' +
+          '</div>' +
+          '<div class="quiz-progress">' +
+            step.questions.map(function(item, i){
+              var classes = ['btn','quiz-pill'];
+              if(i === activeIndex) classes.push('current');
+              if(hasQuestionAnswer(step, i)) classes.push('answered');
+              return '<button type="button" class="' + classes.join(' ') + '" data-question-index="' + i + '">' + (i + 1) + '</button>';
+            }).join('') +
+          '</div>' +
+          '<div class="focus-card">' +
+            '<div class="focus-meta">Question ' + (activeIndex + 1) + '</div>' +
+            '<div class="focus-prompt">' + escapeHtml(q.prompt) + '</div>' +
+            '<div class="focus-sub ' + (selected === undefined ? 'placeholder' : '') + '">' +
+              (selected === undefined ? '아래 보기에서 가장 자연스러운 답을 선택해 주세요.' : '선택한 답: <strong>' + escapeHtml(q.options[selected]) + '</strong>') +
+            '</div>' +
+          '</div>' +
+          '<div class="option-stack-mobile">' +
+            q.options.map(function(opt, optIndex){
+              var cls = 'choice option-card';
+              if(Number(selected) === optIndex) cls += ' selected';
+              if(checked && optIndex === q.answer) cls += ' correct';
+              if(checked && Number(selected) === optIndex && optIndex !== q.answer) cls += ' wrong';
+              return '<button type="button" class="' + cls + '" data-mcq-step="' + step.id + '" data-q="' + activeIndex + '" data-opt="' + optIndex + '">' + escapeHtml(opt) + '</button>';
+            }).join('') +
+          '</div>' +
+          '<div class="question-nav">' +
+            '<button type="button" class="ghost" data-question-nav="prev">이전 문항</button>' +
+            '<button type="button" class="ghost" data-clear-question-answer="' + activeIndex + '">선택 지우기</button>' +
+            '<button type="button" class="ghost" data-question-nav="next">다음 문항</button>' +
+          '</div>' +
+          '<div class="question-summary">' +
+            '<div class="help" style="margin-bottom:8px">문항 이동 바로가기</div>' +
+            '<div class="question-summary-list">' +
+              step.questions.map(function(item, i){
+                return '<button type="button" class="ghost question-summary-item" data-question-index="' + i + '"><b>' + (i + 1) + '.</b><span>' + (hasQuestionAnswer(step, i) ? '답 선택 완료' : '아직 미응답') + '</span></button>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          (checked ? '<div class="feedback ' + (Number(selected) === q.answer ? 'ok' : 'bad') + '">' + (Number(selected) === q.answer ? '정답입니다. ' : '한 번 더 보완해봅시다. ') + escapeHtml(q.explain) + '</div>' : '') +
+        '</div>' +
+        (state.checked[step.id] ? '<div class="feedback ok">현재 단계 점수: ' + stepScoreLabel(step) + '</div>' : '');
+    }
+
+    function renderUnscramble(step){
+      var activeIndex = getQuestionViewIndex(step);
+      var q = step.questions[activeIndex];
+      var built = state.scrambleAnswers[activeIndex] || [];
+      var usedIds = built.reduce(function(acc, item){ acc[item.id] = true; return acc; }, {});
+      var checked = !!state.checked.unscramble;
+      var correct = normalize(getBuiltSentence(activeIndex)) === normalize(q.answer);
+      var answered = countAnsweredInStep(step);
+
+      return '' +
+        '<div class="panel mobile-quiz">' +
+          '<h3>한 문장씩 듣고 배열하세요</h3>' +
+          '<div class="help">문장 번호를 누르면 이동합니다. 현재 문장에만 집중할 수 있도록 구성했습니다.</div>' +
+          '<div class="quiz-topline">' +
+            '<div class="badge">진행 ' + answered + ' / ' + step.questions.length + '</div>' +
+            '<div class="quiz-status ' + (built.length ? 'ok' : '') + '">' +
+              (built.length ? '문장 작성 중 · 탭해서 다시 정리 가능' : '토큰을 눌러 문장을 만들어 보세요') +
+            '</div>' +
+          '</div>' +
+          '<div class="quiz-progress">' +
+            step.questions.map(function(item, i){
+              var classes = ['btn','quiz-pill'];
+              if(i === activeIndex) classes.push('current');
+              if(hasQuestionAnswer(step, i)) classes.push('answered');
+              return '<button type="button" class="' + classes.join(' ') + '" data-question-index="' + i + '">' + (i + 1) + '</button>';
+            }).join('') +
+          '</div>' +
+          '<div class="focus-card">' +
+            '<div class="focus-meta">Sentence ' + (activeIndex + 1) + '</div>' +
+            '<div class="focus-prompt">' + escapeHtml(q.prompt) + '</div>' +
+            '<div class="focus-sub ' + (built.length ? '' : 'placeholder') + '">' +
+              (built.length ? '현재 배열: <strong>' + escapeHtml(getBuiltSentence(activeIndex)) + '</strong>' : '아래 토큰을 차례로 눌러 영어 문장을 완성해 주세요.') +
+            '</div>' +
+          '</div>' +
+          '<div class="build-box mobile-build-box"><div class="built-wrap">' +
+            (built.length ? built.map(function(item, index){
+              return '<button class="token selected" data-built-q="' + activeIndex + '" data-built-index="' + index + '">' + escapeHtml(item.word) + '</button>';
+            }).join('') : '<span class="help">여기에 단어를 순서대로 쌓아 주세요.</span>') +
+          '</div></div>' +
+          '<div class="token-wrap mobile-token-wrap">' +
+            q.tokens.map(function(word, i){
+              var id = activeIndex + '-' + i;
+              return '<button class="token ' + (usedIds[id] ? 'used' : '') + '" data-token-q="' + activeIndex + '" data-token-id="' + id + '" data-token-word="' + escapeHtml(word) + '">' + escapeHtml(word) + '</button>';
+            }).join('') +
+          '</div>' +
+          '<div class="question-nav">' +
+            '<button type="button" class="ghost" data-question-nav="prev">이전 문장</button>' +
+            '<button type="button" class="ghost" data-clear-question-answer="' + activeIndex + '">문장 지우기</button>' +
+            '<button type="button" class="ghost" data-question-nav="next">다음 문장</button>' +
+          '</div>' +
+          '<div class="question-tools">' +
+            '<button class="ghost" data-speak="' + escapeHtml(q.answer) + '">🔊 듣기</button>' +
+            '<button class="ghost" data-hint="' + activeIndex + '">힌트</button>' +
+          '</div>' +
+          '<div class="question-summary">' +
+            '<div class="help" style="margin-bottom:8px">문장 이동 바로가기</div>' +
+            '<div class="question-summary-list">' +
+              step.questions.map(function(item, i){
+                return '<button type="button" class="ghost question-summary-item" data-question-index="' + i + '"><b>' + (i + 1) + '.</b><span>' + (hasQuestionAnswer(step, i) ? escapeHtml(getBuiltSentence(i)) : '아직 미작성') + '</span></button>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          (state.hints[activeIndex] ? '<div class="hint">힌트: ' + escapeHtml(q.hint) + '</div>' : '') +
+          (checked ? '<div class="feedback ' + (correct ? 'ok' : 'bad') + '">' + (correct ? '정답입니다.' : '정답: ' + escapeHtml(q.answer)) + '</div>' : '') +
+        '</div>' +
+        (state.checked.unscramble ? '<div class="feedback ok">현재 단계 점수: ' + stepScoreLabel(step) + '</div>' : '');
+    }
+
+    function renderSummary(){
+      return '' +
+        '<div class="divider"></div>' +
+        '<div class="section-title">학습 결과 요약</div>' +
+        '<div class="summary-grid">' +
+          steps.map(function(step){
+            return '<div class="summary-item"><span>' + step.title + '</span><strong>' + stepScoreLabel(step) + '</strong><div class="help" style="margin:4px 0 0">' + escapeHtml(step.short) + '</div></div>';
+          }).join('') +
+        '</div>' +
+        '<div class="panel" style="margin-top:14px">' +
+          '<h3>관리자 리포트 저장</h3>' +
+          '<div class="help">이 학습 결과를 관리자용 점수 리포트 목록에 저장할 수 있습니다.</div>' +
+          '<div class="inline-actions">' +
+            '<button class="primary dark" id="submitReportBtn">점수 리포트 저장</button>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function renderAdmin(){
+      var totalRecords = reports.length;
+      var avgScore = totalRecords ? (reports.reduce(function(sum, record){ return sum + Number(record.totalScore || 0); }, 0) / totalRecords).toFixed(1) : '0.0';
+      var avgCompletion = totalRecords ? Math.round(reports.reduce(function(sum, record){ return sum + Number(record.completionRate || 0); }, 0) / totalRecords) : 0;
+      var latest = totalRecords ? reports[0].savedAt : '';
+
+      var html = '' +
+        '<h2>관리자용 점수 리포트</h2>' +
+        '<div class="sub">이 기기(localStorage)에 저장된 학습 기록을 모아 보는 간이 관리자 대시보드입니다.</div>' +
+        '<div class="admin-grid">' +
+          '<div class="admin-stat"><span>저장된 리포트</span><strong>' + totalRecords + '</strong></div>' +
+          '<div class="admin-stat"><span>평균 점수</span><strong>' + avgScore + ' / ' + totalQuestions() + '</strong></div>' +
+          '<div class="admin-stat"><span>평균 완료율</span><strong>' + avgCompletion + '%</strong></div>' +
+          '<div class="admin-stat"><span>최근 저장</span><strong>' + (latest ? formatDateTime(latest) : '-') + '</strong></div>' +
+        '</div>' +
+        '<div class="inline-actions">' +
+          '<button class="ghost" id="downloadCsvBtn">CSV 내보내기</button>' +
+          '<button class="ghost" id="clearReportsBtn">리포트 전체 삭제</button>' +
+        '</div>' +
+        '<div class="section-title">저장된 학습 기록</div>';
+
+      if(!reports.length){
+        html += '<div class="empty">아직 저장된 관리자 리포트가 없습니다. 학습 완료 후 “점수 리포트 저장”을 눌러 주세요.</div>';
+      } else {
+        html += '<div class="record-list">' + reports.map(function(record){
+          return '' +
+            '<div class="record-card">' +
+              '<div class="record-head">' +
+                '<div><strong>' + escapeHtml(record.learnerName) + '</strong><small>' + escapeHtml(record.storeName) + '</small></div>' +
+                '<div style="text-align:right"><strong>' + record.totalScore + ' / ' + record.totalQuestions + '</strong><small>' + formatDateTime(record.savedAt) + '</small></div>' +
+              '</div>' +
+              '<div class="mini-grid">' +
+                '<div class="mini-item">완료율<br /><strong>' + record.completionRate + '%</strong></div>' +
+                '<div class="mini-item">Step 결과<br /><strong>' + record.stepScores.map(function(step){ return step.correct + '/' + step.total; }).join(' · ') + '</strong></div>' +
+              '</div>' +
+            '</div>';
+        }).join('') + '</div>';
+      }
+
+      document.getElementById('adminCard').innerHTML = html;
+      bindAdminEvents();
+    }
+
+    function bindMainEvents(step){
+      function onInput(id, key){
+        var el = document.getElementById(id);
+        if(el){
+          el.addEventListener('input', function(){
+            state.learner[key] = el.value;
+            saveState();
+          });
+        }
+      }
+      onInput('learnerNameInput','name');
+      onInput('storeNameInput','store');
+
+      var learnerToggleBtn = document.getElementById('learnerToggleBtn');
+      if(learnerToggleBtn) learnerToggleBtn.addEventListener('click', function(){
+        state.showLearnerForm = !state.showLearnerForm;
+        saveState();
+        render();
+      });
+
+      var checkBtn = document.getElementById('checkStepBtn');
+      if(checkBtn) checkBtn.addEventListener('click', function(){ state.checked[step.id] = true; saveState(); render(); });
+      var clearStepBtn = document.getElementById('clearStepBtn');
+      if(clearStepBtn) clearStepBtn.addEventListener('click', clearCurrentStep);
+      var resetAllBtn = document.getElementById('resetAllBtn');
+      if(resetAllBtn) resetAllBtn.addEventListener('click', resetAll);
+      var submitReportBtn = document.getElementById('submitReportBtn');
+      if(submitReportBtn) submitReportBtn.addEventListener('click', submitReport);
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-match-index]'), function(btn){
+        btn.addEventListener('click', function(){
+          state.matchingSelectedLeft = Number(btn.getAttribute('data-match-index'));
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-match-nav]'), function(btn){
+        btn.addEventListener('click', function(){
+          var activeIndex = getActiveMatchingIndex(step);
+          var direction = btn.getAttribute('data-match-nav') === 'next' ? 1 : -1;
+          state.matchingSelectedLeft = getAdjacentMatchingIndex(step, activeIndex, direction);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-clear-match]'), function(btn){
+        btn.addEventListener('click', function(){
+          var leftIndex = Number(btn.getAttribute('data-clear-match'));
+          removeMatchingByLeft(leftIndex);
+          state.matchingSelectedLeft = leftIndex;
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-match-choice]'), function(btn){
+        btn.addEventListener('click', function(){
+          var leftIndex = Number(btn.getAttribute('data-active-left'));
+          var rightIndex = Number(btn.getAttribute('data-match-choice'));
+          var owner = findLeftByRight(rightIndex);
+
+          if(state.matchingAnswers[leftIndex] === rightIndex){
+            removeMatchingByLeft(leftIndex);
+            state.matchingSelectedLeft = leftIndex;
+            saveState();
+            render();
+            return;
+          }
+
+          if(owner !== null && owner !== leftIndex){
+            removeMatchingByLeft(owner);
+          }
+
+          state.matchingAnswers[leftIndex] = rightIndex;
+          state.matchingSelectedLeft = getNextUnansweredMatchingIndex(step, leftIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-question-index]'), function(btn){
+        btn.addEventListener('click', function(){
+          setQuestionViewIndex(step.id, Number(btn.getAttribute('data-question-index')));
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-question-nav]'), function(btn){
+        btn.addEventListener('click', function(){
+          var currentIndex = getQuestionViewIndex(step);
+          var direction = btn.getAttribute('data-question-nav') === 'next' ? 1 : -1;
+          setQuestionViewIndex(step.id, getAdjacentQuestionIndex(step, currentIndex, direction));
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-clear-question-answer]'), function(btn){
+        btn.addEventListener('click', function(){
+          var qIndex = Number(btn.getAttribute('data-clear-question-answer'));
+          clearQuestionAnswer(step, qIndex);
+          setQuestionViewIndex(step.id, qIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-mcq-step]'), function(btn){
+        btn.addEventListener('click', function(){
+          var stepId = btn.getAttribute('data-mcq-step');
+          var qIndex = Number(btn.getAttribute('data-q'));
+          var optIndex = Number(btn.getAttribute('data-opt'));
+          state.mcqAnswers[stepId][qIndex] = optIndex;
+          setQuestionViewIndex(stepId, qIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-token-q]'), function(btn){
+        btn.addEventListener('click', function(){
+          var qIndex = Number(btn.getAttribute('data-token-q'));
+          var id = btn.getAttribute('data-token-id');
+          var word = btn.getAttribute('data-token-word');
+          state.scrambleAnswers[qIndex] = state.scrambleAnswers[qIndex] || [];
+          var exists = state.scrambleAnswers[qIndex].some(function(item){ return item.id === id; });
+          if(exists) return;
+          state.scrambleAnswers[qIndex].push({ id:id, word:word });
+          setQuestionViewIndex(step.id, qIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-built-q]'), function(btn){
+        btn.addEventListener('click', function(){
+          var qIndex = Number(btn.getAttribute('data-built-q'));
+          var builtIndex = Number(btn.getAttribute('data-built-index'));
+          if(!state.scrambleAnswers[qIndex]) return;
+          state.scrambleAnswers[qIndex].splice(builtIndex, 1);
+          setQuestionViewIndex(step.id, qIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-clear-line]'), function(btn){
+        btn.addEventListener('click', function(){
+          var qIndex = Number(btn.getAttribute('data-clear-line'));
+          state.scrambleAnswers[qIndex] = [];
+          setQuestionViewIndex(step.id, qIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-hint]'), function(btn){
+        btn.addEventListener('click', function(){
+          var qIndex = Number(btn.getAttribute('data-hint'));
+          state.hints[qIndex] = !state.hints[qIndex];
+          setQuestionViewIndex(step.id, qIndex);
+          saveState();
+          render();
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll('[data-speak]'), function(btn){
+        btn.addEventListener('click', function(){
+          speak(btn.getAttribute('data-speak'));
+        });
+      });
+    }
+
+    function bindAdminEvents(){
+      var csvBtn = document.getElementById('downloadCsvBtn');
+      if(csvBtn) csvBtn.addEventListener('click', downloadCSV);
+      var clearBtn = document.getElementById('clearReportsBtn');
+      if(clearBtn) clearBtn.addEventListener('click', clearReports);
+    }
+
+    function render(){
+      renderTabs();
+      renderHeader();
+      renderMain();
+      renderAdmin();
+    }
+
+    saveState();
+    render();
+  })();
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
